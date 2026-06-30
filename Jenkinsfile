@@ -38,7 +38,8 @@ pipeline {
                     string(credentialsId: 'AZURE_TENANT_ID', variable: 'AZURE_TENANT_ID')
                 ]) {
                     // Authenticate the Azure CLI
-                    sh 'az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID'
+                    // Using --password= syntax to handle secrets that start with a hyphen (-)
+                    sh 'az login --service-principal -u $AZURE_CLIENT_ID --password="$AZURE_CLIENT_SECRET" --tenant $AZURE_TENANT_ID'
                     
                     // Deploy the application
                     sh 'az webapp up --name dhruvsimform-jenkins-demo --resource-group JenkinsDemo-RG --html'
