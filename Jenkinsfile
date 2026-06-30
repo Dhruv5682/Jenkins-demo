@@ -26,11 +26,26 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to Azure') {
             steps {
-                echo 'Deploying application...'
-                // This is a placeholder for actual deployment steps
-                sh 'echo "Deployment successful!"'
+                echo 'Deploying application to Azure App Service...'
+                
+                // IMPORTANT: To make this work, you need the Azure CLI installed on your Jenkins server
+                // and you need to log in to Azure using a Service Principal.
+                // You would typically configure these credentials in Jenkins and inject them as environment variables.
+                
+                // Example deployment command (uncomment and replace variables to use):
+                /*
+                withCredentials([azureServicePrincipal('my-azure-credentials-id')]) {
+                    sh 'az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID'
+                    
+                    // The 'az webapp up' command automatically creates an App Service if it doesn't exist
+                    // and deploys your HTML code to it!
+                    sh 'az webapp up --name my-unique-jenkins-app-1234 --resource-group Jenkins-RG --html'
+                }
+                */
+                
+                echo 'Deployment stage completed. (Azure commands are commented out until credentials are set up)'
             }
         }
     }
