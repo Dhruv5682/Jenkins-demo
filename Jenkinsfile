@@ -41,8 +41,20 @@ pipeline {
                     // Using --password= syntax to handle secrets that start with a hyphen (-)
                     sh 'az login --service-principal -u $AZURE_CLIENT_ID --password="$AZURE_CLIENT_SECRET" --tenant $AZURE_TENANT_ID'
                     
-                    // Deploy the application
-                    sh 'az webapp up --name dhruvsimform-jenkins-demo --resource-group JenkinsDemo-RG --html'
+                    // Create a resource group
+                    sh 'az group create --name JenkinsDemo-RG --location eastus'
+                    
+                    // Create an App Service Plan (B1 is a basic tier)
+                    sh 'az appservice plan create --name JenkinsDemoPlan --resource-group JenkinsDemo-RG --sku B1 --is-linux'
+                    
+                    // Create the Web App using a Node.js runtime to host the page
+                    sh 'az webapp create --resource-group JenkinsDemo-RG --plan JenkinsDemoPlan --name dhruvsimform-jenkins-demo --runtime "NODE|18-lts"'
+                    
+                    // Zip the HTML file for deployment
+                    sh 'zip site.zip index.html'
+                    
+                    // Deploy the zip file to the Web App
+                    sh 'az webapp deploy --resource-group JenkinsDemo-RG --name dhruvsimform-jenkins-demo --src-path site.zip --type zip'
                 }
                 
                 echo 'Deployment stage completed.'
