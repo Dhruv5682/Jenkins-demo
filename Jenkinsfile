@@ -47,8 +47,8 @@ pipeline {
                     // Create an App Service Plan (B1 is a basic tier)
                     sh 'az appservice plan create --name JenkinsDemoPlan --resource-group JenkinsDemo-RG --sku B1 --is-linux'
                     
-                    // Create the Web App using a Node.js runtime to host the page
-                    sh 'az webapp create --resource-group JenkinsDemo-RG --plan JenkinsDemoPlan --name dhruvsimform-jenkins-demo --runtime "NODE|18-lts"'
+                    // Create the Web App
+                    sh 'az webapp create --resource-group JenkinsDemo-RG --plan JenkinsDemoPlan --name dhruvsimform-jenkins-demo --runtime "NODE:22-lts"'
                     
                     // Zip the HTML file for deployment
                     sh 'zip site.zip index.html'
