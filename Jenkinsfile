@@ -50,8 +50,8 @@ pipeline {
                     // Create the Web App
                     sh 'az webapp create --resource-group JenkinsDemo-RG --plan JenkinsDemoPlan --name dhruvsimform-jenkins-demo --runtime "NODE:22-lts"'
                     
-                    // Create a zip for deployment using Python (guaranteed to exist since Azure CLI depends on it)
-                    sh 'python3 -c "import zipfile; z=zipfile.ZipFile(\'site.zip\',\'w\'); z.write(\'index.html\'); z.close()"'
+                    // Create a zip for deployment with all necessary files
+                    sh 'python3 -c "import zipfile; z=zipfile.ZipFile(\'site.zip\',\'w\'); z.write(\'index.html\'); z.write(\'index.js\'); z.write(\'package.json\'); z.close()"'
                     
                     // Deploy the zip file to the Web App
                     sh 'az webapp deploy --resource-group JenkinsDemo-RG --name dhruvsimform-jenkins-demo --src-path site.zip --type zip'
