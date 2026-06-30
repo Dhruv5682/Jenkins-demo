@@ -42,7 +42,7 @@ pipeline {
                     sh 'az login --service-principal -u $AZURE_CLIENT_ID --password="$AZURE_CLIENT_SECRET" --tenant $AZURE_TENANT_ID'
                     
                     // Create a resource group
-                    sh 'az group create --name JenkinsDemo-RG --location centralindia'
+                    sh 'az group create --name JenkinsDemo-RG --location southeastasia'
                     
                     // Create an App Service Plan (B1 is a basic tier)
                     sh 'az appservice plan create --name JenkinsDemoPlan --resource-group JenkinsDemo-RG --sku B1 --is-linux'
