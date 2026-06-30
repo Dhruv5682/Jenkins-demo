@@ -30,9 +30,19 @@ pipeline {
             steps {
                 echo 'Deploying application to Azure App Service...'
                 
-                // Since you have already logged into Azure CLI on the Jenkins host, 
-                // we can directly run the deployment command.
-                sh 'az webapp up --name dhruvsimform-jenkins-demo --resource-group JenkinsDemo-RG --html'
+                // Logging in using a Service Principal (Best Practice)
+                // The credentials will be pulled securely from Jenkins Global Credentials
+                withCredentials([
+                    string(credentialsId: 'AZURE_CLIENT_ID', variable: 'AZURE_CLIENT_ID'),
+                    string(credentialsId: 'AZURE_CLIENT_SECRET', variable: 'AZURE_CLIENT_SECRET'),
+                    string(credentialsId: 'AZURE_TENANT_ID', variable: 'AZURE_TENANT_ID')
+                ]) {
+                    // Authenticate the Azure CLI
+                    sh 'az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID'
+                    
+                    // Deploy the application
+                    sh 'az webapp up --name dhruvsimform-jenkins-demo --resource-group JenkinsDemo-RG --html'
+                }
                 
                 echo 'Deployment stage completed.'
             }
